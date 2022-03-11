@@ -20,6 +20,12 @@ const result = myModule(args);
 // result is ...
 ```
 
+
+## Related package:
+- [scikit.js](https://github.com/javascriptdata/scikit.js)
+
+
+
 ## License
 
 [MIT](./LICENSE)
