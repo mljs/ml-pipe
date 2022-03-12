@@ -1,26 +1,49 @@
 import { Matrix } from 'ml-matrix';
 
-import { Transformer } from './transformer';
+import { OperationSteps, operationChain } from '../../utils/vectorMatrix';
+import { turnZerosToOnes } from '../../utils/zerosToOnes';
+import { Transformer } from '../transformer';
 
 export class StandardScaler implements Transformer {
-  private std: Matrix;
-  private mean: Matrix;
+  private std: number[];
+  private mean: number[];
 
   public constructor() {
-    this.std = new Matrix([]);
-    this.mean = new Matrix([]);
+    this.std = [];
+    this.mean = [];
   }
 
   public fit(X: Matrix) {
-    this.std = new Matrix([X.variance('column')]);
-    this.mean = new Matrix([X.mean('column')]);
+    // using biased estimator following sklearn convention
+    // we turn zeros to ones to avoid division by zero
+    this.std = turnZerosToOnes(
+      X.standardDeviation('column', { unbiased: false }),
+    );
+    this.mean = X.mean('column');
   }
 
   public transform(X: Matrix) {
-    return X.sub(this.mean).div(this.std);
+    let steps: OperationSteps = {
+      steps: [
+        [this.mean, '-'],
+        [this.std, '/'],
+      ],
+    };
+    return operationChain(X, steps);
   }
 
   public inverseTransform(X: Matrix) {
-    return X.mul(this.std).add(this.mean);
+    let steps: OperationSteps = {
+      steps: [
+        [this.std, '*'],
+        [this.mean, '+'],
+      ],
+    };
+    return operationChain(X, steps);
+  }
+
+  public fitTransform(X: Matrix) {
+    this.fit(X);
+    return this.transform(X);
   }
 }

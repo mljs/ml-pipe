@@ -4,4 +4,5 @@ export interface Transformer {
   fit: (X: Matrix) => void;
   transform: (X: Matrix) => Matrix;
   inverseTransform: (X: Matrix) => Matrix;
+  fitTransform: (X: Matrix) => Matrix;
 }
