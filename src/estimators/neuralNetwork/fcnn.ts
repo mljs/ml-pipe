@@ -1,42 +1,91 @@
-import { sequential, layers } from '@tensorflow/tfjs';
+import { sequential, layers, LayersModel, tensor2d } from '@tensorflow/tfjs';
+import { Matrix } from 'ml-matrix';
 
-function get_model(
-  inputShape: number,
-  hiddenShapes: number[],
-  outputShape: number,
-  hiddenActivation: 'relu' | 'sigmoid' | 'tanh' | 'linear',
-  finalActivation: 'relu' | 'sigmoid' | 'tanh' | 'linear',
+import { Estimator } from '../estimator';
+
+export interface FCNNOptions {
+  inputShape: number;
+  hiddenShapes: number[];
+  outputShape: number;
+  hiddenActivation: 'relu' | 'sigmoid' | 'tanh' | 'linear';
+  finalActivation: 'relu' | 'sigmoid' | 'tanh' | 'linear';
   kernelInitializer:
     | 'leCunNormal'
     | 'glorotUniform'
     | 'randomUniform'
     | 'truncatedNormal'
-    | 'varianceScaling',
-) {
+    | 'varianceScaling';
+  optimizer: 'sgd' | 'rmsprop' | 'adam' | 'adagrad' | 'adadelta';
+  loss: 'meanSquaredError' | 'binaryCrossentropy' | 'categoricalCrossentropy';
+  metrics: string[];
+}
+
+export interface TrainingOptions {
+  epochs: number;
+
+  learningRate: number;
+  batchSize: number;
+  validationSplit: number;
+}
+
+function getModel(options: FCNNOptions): LayersModel {
   const model = sequential();
   model.add(
     layers.dense({
-      inputShape: [inputShape],
-      units: hiddenShapes[0],
-      activation: hiddenActivation,
-      kernelInitializer: kernelInitializer,
+      inputShape: [options.inputShape],
+      units: options.hiddenShapes[0],
+      activation: options.hiddenActivation,
+      kernelInitializer: options.kernelInitializer,
     }),
   );
-  for (let i = 1; i < hiddenShapes.length; i++) {
+  for (let i = 1; i < options.hiddenShapes.length; i++) {
     model.add(
       layers.dense({
-        units: hiddenShapes[i],
-        activation: hiddenActivation,
-        kernelInitializer: kernelInitializer,
+        units: options.hiddenShapes[i],
+        activation: options.hiddenActivation,
+        kernelInitializer: options.kernelInitializer,
       }),
     );
   }
   model.add(
     layers.dense({
-      units: outputShape,
-      activation: finalActivation,
-      kernelInitializer: kernelInitializer,
+      units: options.outputShape,
+      activation: options.finalActivation,
+      kernelInitializer: options.kernelInitializer,
     }),
   );
+  model.compile({
+    optimizer: options.optimizer,
+    loss: options.loss,
+    metrics: options.metrics,
+  });
   return model;
+}
+
+export class FCNN implements Estimator {
+  private model: LayersModel;
+  private trainingOptions: TrainingOptions;
+  public constructor(
+    architecture: FCNNOptions,
+    trainingOptions: TrainingOptions,
+  ) {
+    this.model = getModel(architecture);
+    this.trainingOptions = trainingOptions;
+  }
+
+  public async fit(X: Matrix, y: Matrix) {
+    this.model
+      .fit(
+        tensor2d(X.to2DArray()),
+        tensor2d(y.to2DArray()),
+        this.trainingOptions,
+      )
+      .catch((err) => {
+        console.log('error', err);
+      });
+  }
+
+  public async predict(X: Matrix) {
+    return new Matrix(this.model.predict(tensor2d(X.to2DArray())).array());
+  }
 }
