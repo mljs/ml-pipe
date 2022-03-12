@@ -12,6 +12,32 @@ export class Pipeline {
     this.validateSteps(this.steps);
   }
 
+  // Implementation taken from scikitjs
+  private isTransformer(possibleTransformer: any) {
+    if (possibleTransformer === 'passthrough') {
+      return true;
+    }
+    if (
+      typeof possibleTransformer.fit === 'function' &&
+      typeof possibleTransformer.transform === 'function' &&
+      typeof possibleTransformer.fitTransform === 'function'
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  // Implementation taken from scikitjs
+  private isEstimator(possibleTransformer: any) {
+    if (possibleTransformer === 'passthrough') {
+      return true;
+    }
+    if (typeof possibleTransformer.fit === 'function') {
+      return true;
+    }
+    return false;
+  }
+
   private validateSteps(steps) {}
 
   public async fit(X: Matrix, y: Matrix) {}

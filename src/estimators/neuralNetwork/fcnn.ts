@@ -1,4 +1,10 @@
-import { sequential, layers, LayersModel, tensor2d } from '@tensorflow/tfjs';
+import {
+  sequential,
+  layers,
+  LayersModel,
+  tensor2d,
+  Tensor2D,
+} from '@tensorflow/tfjs';
 import { Matrix } from 'ml-matrix';
 
 import { Estimator } from '../estimator';
@@ -85,7 +91,8 @@ export class FCNN implements Estimator {
       });
   }
 
-  public async predict(X: Matrix) {
-    return new Matrix(this.model.predict(tensor2d(X.to2DArray())).array());
+  public predict(X: Matrix) {
+    let prediction = this.model.predict(tensor2d(X.to2DArray())) as Tensor2D;
+    return new Matrix(prediction.arraySync());
   }
 }
