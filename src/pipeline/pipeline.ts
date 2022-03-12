@@ -14,7 +14,7 @@ export class Pipeline {
 
   private validateSteps(steps) {}
 
-  public fit(X: Matrix, y: Matrix) {}
+  public async fit(X: Matrix, y: Matrix) {}
 
   public transform(X: Matrix) {}
 
