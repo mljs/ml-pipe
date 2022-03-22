@@ -1,15 +1,13 @@
 import { Matrix } from 'ml-matrix';
 
+import { Estimator } from '../estimators/estimator';
+
 // Implementation inspired by scikitjs
 
-export interface PipelineSteps {
-  steps?: Array<[string, any]>;
-}
-
 export class Pipeline {
-  public steps: Array<[string, any]>;
+  public steps: Array<[string, Transformer | Estimator]>;
 
-  public constructor({ steps = [] }: PipelineSteps = {}) {
+  public constructor(steps: Array<[string, Transformer | Estimator]>) {
     this.steps = steps;
     this.validateSteps(this.steps);
   }
@@ -29,6 +27,10 @@ export class Pipeline {
     return false;
   }
 
+  private getLastEstimator() {
+    return this.steps[this.steps.length - 1][1];
+  }
+
   // Implementation taken from scikitjs
   private isEstimator(possibleTransformer: any) {
     if (possibleTransformer === 'passthrough') {
@@ -40,11 +42,41 @@ export class Pipeline {
     return false;
   }
 
-  private validateSteps(steps) {}
+  private validateSteps(steps: Array<[string, Transformer | Estimator]>) {
+    // The last step must be an estimator and all the others must be transformers
+    // otherwise it is not really clear what the user wants to do
+    const lastStep = steps[steps.length - 1];
+    for (let i = 0; i < steps.length - 2; ++i) {
+      const step = steps[i];
+      if (!this.isTransformer(step[1])) {
+        throw new Error(`Step ${i} should be a transformer but is not.`);
+      }
+    }
+    if (!this.isEstimator(lastStep[1])) {
+      throw new Error(`Last step should be an estimator but is not.`);
+    }
+  }
 
-  public async fit(X: Matrix, y: Matrix) {}
+  public async fit(X: Matrix, y: Matrix) {
+    let XT = this.transform(X);
+    await this.getLastEstimator().fit(XT, y);
+    return this;
+  }
 
-  public transform(X: Matrix) {}
+  public transform(X: Matrix) {
+    let Xt = X;
 
-  public predict(X: Matrix) {}
+    for (const step of this.steps.slice(0, -1)) {
+      let [name, transformer] = step;
+      if (!(name === 'passthrough')) {
+        Xt = transformer.transform(Xt);
+      }
+    }
+    return Xt;
+  }
+
+  public predict(X: Matrix) {
+    let XT = this.transform(X);
+    return this.getLastEstimator().predict(XT);
+  }
 }
