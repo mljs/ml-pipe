@@ -15,7 +15,7 @@ export class RandomForestRegressor implements Estimator {
     this.regressor.train(X.to2DArray(), y.to1DArray());
   }
 
-  public async predict(X: Matrix) {
+  public predict(X: Matrix) {
     return new Matrix([this.regressor.predict(X.to2DArray())]);
   }
 }

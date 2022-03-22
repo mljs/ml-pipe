@@ -1,5 +1,7 @@
 import { Matrix } from 'ml-matrix';
 
+// Implementation inspired by scikitjs
+
 export interface PipelineSteps {
   steps?: Array<[string, any]>;
 }
