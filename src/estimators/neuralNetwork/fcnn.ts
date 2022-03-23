@@ -3,6 +3,7 @@ import {
   layers,
   LayersModel,
   tensor2d,
+  tensor1d,
   Tensor2D,
 } from '@tensorflow/tfjs';
 import { Matrix } from 'ml-matrix';
@@ -28,7 +29,6 @@ export interface FCNNOptions {
 
 export interface TrainingOptions {
   epochs: number;
-
   learningRate: number;
   batchSize: number;
   validationSplit: number;
@@ -83,11 +83,11 @@ export class FCNN implements Estimator {
     this.model
       .fit(
         tensor2d(X.to2DArray()),
-        tensor2d(y.to2DArray()),
+        tensor1d(y.to1DArray()),
         this.trainingOptions,
       )
       .catch((err) => {
-        console.log('error', err);
+        throw new Error(err.message);
       });
   }
 

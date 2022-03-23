@@ -19,6 +19,19 @@ describe('test the operatorchain', () => {
     ]);
   });
 
+  it('simple column', () => {
+    const m = Matrix.zeros(2, 1);
+    const vector = [1];
+    const steps: OperationSteps = {
+      steps: [
+        [vector, '+'],
+        [vector, '+'],
+      ],
+    };
+    const result = operationChain(m, steps);
+    expect(result.to2DArray()).toStrictEqual([[2], [2]]);
+  });
+
   it('simple matrix addition and substraction', () => {
     const m = Matrix.zeros(2, 2);
     const vector = [1, 2];
