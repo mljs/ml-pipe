@@ -6,7 +6,7 @@ import { Estimator } from '../estimator';
 export class LinearRegressor implements Estimator {
   private intercept: boolean;
   private model: MLR | undefined;
-  public constructor(intercept: boolean) {
+  public constructor(intercept?: boolean) {
     this.intercept = intercept || true;
     this.model = undefined;
   }
