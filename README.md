@@ -5,7 +5,7 @@
 [![Test coverage][codecov-image]][codecov-url]
 [![npm download][download-image]][download-url]
 
-Orchestrate ML pipelines.
+Orchestrate ML pipelines. One design different to `sklearn` pipelines is that our transformers can have the attribute `onTarget` for use in Pipelines. There, it can be convenient and to simply add a target transformation as a step into the Pipeline 
 
 ## Installation
 

@@ -58,25 +58,31 @@ export class Pipeline {
   }
 
   public async fit(X: Matrix, y: Matrix) {
-    let XT = this.transform(X);
-    await this.getLastEstimator().fit(XT, y);
+    let Xt;
+    let yt = this.transform(X, y);
+    await this.getLastEstimator().fit(Xt, yt);
     return this;
   }
 
-  public transform(X: Matrix) {
+  public transform(X: Matrix, y?: Matrix) {
     let Xt = X;
+    let yt = y;
 
     for (const step of this.steps.slice(0, -1)) {
       let [name, transformer] = step;
       if (!(name === 'passthrough')) {
-        Xt = transformer.transform(Xt);
+        if (transformer.onTarget) {
+          yt = transformer.transform(yt);
+        } else {
+          Xt = transformer.transform(Xt);
+        }
       }
     }
     return Xt;
   }
 
-  public predict(X: Matrix) {
-    let XT = this.transform(X);
-    return this.getLastEstimator().predict(XT);
+  public predict(X: Matrix, y?: Matrix) {
+    let transformed = this.transform(X, y);
+    return this.getLastEstimator().predict(transformed[0]);
   }
 }

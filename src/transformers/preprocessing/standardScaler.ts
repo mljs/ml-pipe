@@ -7,8 +7,10 @@ import { Transformer } from '../transformer';
 export class StandardScaler implements Transformer {
   private std: number[];
   private mean: number[];
+  public onTarget: boolean;
 
-  public constructor() {
+  public constructor(onTarget?: boolean) {
+    this.onTarget = onTarget || false;
     this.std = [];
     this.mean = [];
   }
@@ -45,5 +47,14 @@ export class StandardScaler implements Transformer {
   public fitTransform(X: Matrix) {
     this.fit(X);
     return this.transform(X);
+  }
+}
+
+export class TargetStandardScaler extends StandardScaler {
+  public onTarget: boolean;
+
+  public constructor(onTarget?: boolean) {
+    super(onTarget);
+    this.onTarget = true;
   }
 }

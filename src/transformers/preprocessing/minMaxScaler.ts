@@ -8,8 +8,10 @@ import { Transformer } from '../transformer';
 export class MinMaxScaler implements Transformer {
   private min: number[];
   private range: number[];
+  public onTarget: boolean;
 
-  public constructor() {
+  public constructor(onTarget?: boolean) {
+    this.onTarget = onTarget || false;
     this.min = [];
     this.range = [];
   }
@@ -45,5 +47,14 @@ export class MinMaxScaler implements Transformer {
   public fitTransform(X: Matrix) {
     this.fit(X);
     return this.transform(X);
+  }
+}
+
+export class TargetMinMaxScaler extends MinMaxScaler {
+  public onTarget: boolean;
+
+  public constructor(onTarget?: boolean) {
+    super(onTarget);
+    this.onTarget = true;
   }
 }
