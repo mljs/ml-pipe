@@ -56,4 +56,22 @@ describe('test stratification', () => {
     );
     expect(ratioDifference).toBeLessThan(0.25);
   });
+
+  it('harder case, uneven', () => {
+    const array = repeat([1, 2], [90, 10]);
+    const { aIndices, bIndices } = getStratificationIndices(array, 4);
+    expect(aIndices.length).toBeLessThan(86);
+    expect(aIndices.length).toBeGreaterThan(74);
+    expect(bIndices.length + aIndices.length).toBe(array.length);
+    let aSubset = array.filter((_, i) => aIndices.includes(i));
+    let bSubset = array.filter((_, i) => bIndices.includes(i));
+    let { counts: aUniqueCounts } = uniqueValuesIndicesAndCounts(aSubset);
+    let { counts: bUniqueCounts } = uniqueValuesIndicesAndCounts(bSubset);
+    let ratioDifference = Math.abs(
+      Math.abs(9 - aUniqueCounts[1] / aUniqueCounts[2]) -
+        Math.abs(9 - bUniqueCounts[1] / bUniqueCounts[2]),
+    );
+    // relqtive error is less than 0.30
+    expect(ratioDifference / 9).toBeLessThan(0.3);
+  });
 });
