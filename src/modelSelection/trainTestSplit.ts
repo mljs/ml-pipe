@@ -32,9 +32,9 @@ function rangeFromArrayMatrix(x: Array<any> | Matrix) {
 }
 function stratificationIndices(stratifyArray: Array<any>) {
   // Stratified split implementation inspired by https://stackoverflow.com/questions/15838733/stratified-sampling-in-numpy
-  // First we need to find the unique values in the array
-  // Then we need to find the number of times each unique value appears in the array
-  // Then we need to find the indices of the unique values in the array
+  // First we need to find the unique values in the array as well as their indices and counts
+  let { uniqueValues, indices, counts } =
+    uniqueValuesIndicesAndCounts(stratifyArray);
 }
 
 function uniqueValuesIndicesAndCounts(x: Array<any>) {
@@ -64,4 +64,4 @@ function expectedFraction(numPoints: number, trainTestRatio: number) {
   );
 }
 
-export const testables = { expectedFraction };
+export const testables = { expectedFraction, uniqueValuesIndicesAndCounts };
