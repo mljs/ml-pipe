@@ -3,7 +3,54 @@ import { Matrix } from 'ml-matrix';
 import { argSort, cumSum, repeat } from '../utils/array';
 import { clamp } from '../utils/number';
 
-export function trainTestSplit() {}
+export interface TrainTestSplitOptions {
+  trainFraction: number;
+  stratify?: Matrix | Array<any> | boolean;
+  shuffle?: boolean;
+}
+
+export function trainTestSplit(
+  x: Matrix,
+  y: Matrix,
+  options: TrainTestSplitOptions,
+) {
+  const { trainFraction, stratify = false, shuffle = true } = options;
+  if (trainFraction <= 0) {
+    throw new Error('trainFraction must be greater than 0');
+  }
+  if (trainFraction >= 1) {
+    throw new Error('trainFraction must be less than 1');
+  }
+  const trainTestRatio = trainFraction / (1 - trainFraction);
+  if (stratify) {
+    throw new Error('stratify not implemented yet');
+  }
+  let indices;
+  if (shuffle) {
+    indices = generatedShuffledIndices(x);
+  } else {
+    indices = rangeFromArrayMatrix(x);
+  }
+  const nTrain = Math.floor(trainFraction * indices.length);
+  const trainIndices = indices.slice(0, nTrain);
+  const testIndices = indices.slice(nTrain);
+
+  const trainX = new Matrix(trainIndices.length, x.columns);
+  const trainY = new Matrix(trainIndices.length, y.columns);
+  const testX = new Matrix(testIndices.length, x.columns);
+  const testY = new Matrix(testIndices.length, y.columns);
+
+  for (let i = 0; i < trainIndices.length; i++) {
+    trainX.setRow(i, x.getRow(trainIndices[i]));
+    trainY.setRow(i, y.getRow(trainIndices[i]));
+  }
+  for (let i = 0; i < testIndices.length; i++) {
+    testX.setRow(i, x.getRow(testIndices[i]));
+    testY.setRow(i, y.getRow(testIndices[i]));
+  }
+
+  return { trainX, trainY, testX, testY };
+}
 
 function shuffleArray(x: Array<any>) {
   // Durstenfeld shuffle
