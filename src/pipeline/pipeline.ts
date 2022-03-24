@@ -43,11 +43,12 @@ export class Pipeline {
     // The last step must be an estimator and all the others must be transformers
     // otherwise it is not really clear what the user wants to do
     const lastStep = steps[steps.length - 1];
-
-    for (let i = 0; i < steps.length - 1; ++i) {
-      const step = steps[i];
-      if (!this.isTransformer(step[1])) {
-        throw new Error(`Step ${i} should be a transformer but is not.`);
+    if (steps.length > 1) {
+      for (let i = 0; i < steps.length - 1; ++i) {
+        const step = steps[i];
+        if (!this.isTransformer(step[1])) {
+          throw new Error(`Step ${i} should be a transformer but is not.`);
+        }
       }
     }
     if (!this.isEstimator(lastStep[1])) {
