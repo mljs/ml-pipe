@@ -14,10 +14,20 @@ Orchestrate ML pipelines. One design different to `sklearn` pipelines is that ou
 ## Usage
 
 ```js
-import { myModule } from 'ml-pipe';
+import { trainTestSplit } from 'ml-pipe/modelSelection/trainTestSplit';
+import {Pipeline} from 'ml-pipe/pipeline';
+import {FCNN} from 'ml-pipe/estimators/neuralNetwork/fcnn'
+import {StandardScaler, TargetStandardScaler} from 'ml-pipe/transformers/preprocessing/standardScaler'
 
-const result = myModule(args);
-// result is ...
+let splits = trainTestSplit(x, y, stratify=yBinned)
+const pip = new Pipeline([
+    ('xScale', new StandardScaler()),
+    ('yScale', new TargetStandardScaler()),
+    ('model', new FCNN(architectureOptions, trainingOptions))
+])
+
+await pipe.fit(splits[0][0], splits[1][0])
+predictionsTest = pipe.predict(splits[0][1])
 ```
 
 
