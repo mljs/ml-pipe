@@ -1,0 +1,15 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    uses: zakodium/workflows/.github/workflows/release.yml@release-v1
+    with:
+      npm: true
+    secrets:
+      github-token: ${{ secrets.BOT_TOKEN }}
+      npm-token: ${{ secrets.NPM_BOT_TOKEN }}
