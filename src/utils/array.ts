@@ -1,7 +1,7 @@
 const decorateWIndex = (v: number, i: number) => [v, i];
 const removeDecoration = (a: Array<any>) => a[1]; // leave only index
 
-export function argsort(
+export function argSort(
   arr: Array<number>,
   ascending?: boolean,
 ): Array<number> {
@@ -15,4 +15,16 @@ export function argsort(
   } else {
     return sorted.reverse();
   }
+}
+
+export function cumSum(arr: Array<number>): Array<number> {
+  const cumulativeSum = (
+    (sum: number) => (value: number) =>
+      (sum += value)
+  )(0);
+  return arr.map(cumulativeSum);
+}
+
+export function repeat(arr: Array<any>, times: Array<number>): Array<any> {
+  return arr.flatMap((e, index) => Array(times[index]).fill(e));
 }

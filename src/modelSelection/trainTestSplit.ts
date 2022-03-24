@@ -1,5 +1,6 @@
 import { Matrix } from 'ml-matrix';
 
+import { argSort, cumSum, repeat } from '../utils/array';
 import { clamp } from '../utils/number';
 
 export function trainTestSplit() {}
@@ -30,11 +31,53 @@ function rangeFromArrayMatrix(x: Array<any> | Matrix) {
   }
   return range;
 }
-function stratificationIndices(stratifyArray: Array<any>) {
+
+export function getStratificationIndices(
+  stratifyArray: Array<any>,
+  trainTestRatio: number,
+) {
+  // todo:  complain if there is class with less than 2 points
+  // todo: also complain if there is only one class
   // Stratified split implementation inspired by https://stackoverflow.com/questions/15838733/stratified-sampling-in-numpy
   // First we need to find the unique values in the array as well as their indices and counts
-  let { uniqueValues, indices, counts } =
-    uniqueValuesIndicesAndCounts(stratifyArray);
+  const { indices, counts } = uniqueValuesIndicesAndCounts(stratifyArray);
+
+  const blockCounts: Array<number> = Object.values(counts);
+
+  const blocks = argSort(indices);
+  // for example, [0, 2, 5, 10]
+  const blockStartingIndices = [0].concat(cumSum(blockCounts));
+
+  let fractions = blockCounts.map((count: number) =>
+    expectedFraction(count, trainTestRatio),
+  );
+
+  let thresholds = repeat(fractions, blockCounts);
+
+  let setNext = false;
+  for (let i = 0; i < thresholds.length; i++) {
+    if (blockStartingIndices.includes(i)) {
+      thresholds[i] = 1;
+      setNext = true;
+    }
+    if (setNext) {
+      thresholds[i + 1] = 0;
+      setNext = false;
+    } else {
+      thresholds[i] = Number(thresholds[i] > Math.random());
+    }
+  }
+  let aIndices: Array<number> = [];
+  let bIndices: Array<number> = [];
+  for (let i = 0; i < indices.length; i++) {
+    if (thresholds[i] === 1) {
+      aIndices.push(blocks[i]);
+    } else {
+      bIndices.push(blocks[i]);
+    }
+  }
+
+  return { aIndices, bIndices };
 }
 
 function uniqueValuesIndicesAndCounts(x: Array<any>) {

@@ -1,15 +1,29 @@
-import { argsort } from '../array';
+import { argSort, repeat } from '../array';
 
 describe('test argsort', () => {
   it('test argsort - default ascending', () => {
     const array = [1, 3, 2, 4];
-    const sorted = argsort(array);
+    const sorted = argSort(array);
     expect(sorted).toStrictEqual([0, 2, 1, 3]);
   });
 
   it('test argsort - descending', () => {
     const array = [1, 3, 2, 4];
-    const sorted = argsort(array, false);
+    const sorted = argSort(array, false);
     expect(sorted).toStrictEqual([3, 1, 2, 0]);
+  });
+});
+
+describe('test repeat', () => {
+  it('repeat', () => {
+    const array = [1, 2, 3];
+    const repeated = repeat(array, [2, 2, 1]);
+    expect(repeated).toStrictEqual([1, 1, 2, 2, 3]);
+  });
+
+  it('repeat - not really', () => {
+    const array = [1, 2, 3];
+    const repeated = repeat(array, [1, 1, 1]);
+    expect(repeated).toStrictEqual([1, 2, 3]);
   });
 });
