@@ -5,7 +5,7 @@ import { clamp } from '../utils/number';
 
 export interface TrainTestSplitOptions {
   trainFraction: number;
-  stratify?: Matrix | Array<any> | boolean;
+  stratify?: Matrix | Array<any>;
   shuffle?: boolean;
 }
 
@@ -14,26 +14,40 @@ export function trainTestSplit(
   y: Matrix,
   options: TrainTestSplitOptions,
 ) {
-  const { trainFraction, stratify = false, shuffle = true } = options;
+  let { trainFraction, stratify = false, shuffle = true } = options;
   if (trainFraction <= 0) {
     throw new Error('trainFraction must be greater than 0');
   }
   if (trainFraction >= 1) {
     throw new Error('trainFraction must be less than 1');
   }
-  const trainTestRatio = trainFraction / (1 - trainFraction);
+  let trainIndices;
+  let testIndices;
+
   if (stratify) {
-    throw new Error('stratify not implemented yet');
-  }
-  let indices;
-  if (shuffle) {
-    indices = generatedShuffledIndices(x);
+    if (stratify instanceof Matrix) {
+      stratify = stratify.to1DArray();
+    }
+    if (stratify.length !== x.length) {
+      throw new Error('stratify must have same length as x');
+    }
+    const { aIndices, bIndices } = getStratificationIndices(
+      stratify,
+      trainFraction / (1 - trainFraction),
+    );
+    trainIndices = aIndices;
+    testIndices = bIndices;
   } else {
-    indices = rangeFromArrayMatrix(x);
+    let indices;
+    if (shuffle) {
+      indices = generatedShuffledIndices(x);
+    } else {
+      indices = rangeFromArrayMatrix(x);
+    }
+    const nTrain = Math.floor(trainFraction * indices.length);
+    trainIndices = indices.slice(0, nTrain);
+    testIndices = indices.slice(nTrain);
   }
-  const nTrain = Math.floor(trainFraction * indices.length);
-  const trainIndices = indices.slice(0, nTrain);
-  const testIndices = indices.slice(nTrain);
 
   const trainX = new Matrix(trainIndices.length, x.columns);
   const trainY = new Matrix(trainIndices.length, y.columns);
@@ -61,8 +75,6 @@ function shuffleArray(x: Array<any>) {
   }
   return array;
 }
-
-function stratifiedTrainTestSplit() {}
 
 export function generatedShuffledIndices(x: Array<any> | Matrix) {
   const shuffled = shuffleArray(rangeFromArrayMatrix(x));
