@@ -57,7 +57,24 @@ export class Pipeline {
   }
 
   public async fit(X: Matrix, y: Matrix) {
-    let { Xt, yt } = this.transform(X, y);
+    let Xt = X;
+    let yt = y;
+    for (const step of this.steps.slice(0, -1)) {
+      let [name, transformer] = step;
+      if ('transform' in transformer) {
+        if (!(name === 'passthrough')) {
+          if (transformer.onTarget === true) {
+            if (yt === undefined) {
+              throw new Error('y is undefined');
+            }
+            yt = transformer.fitTransform(yt);
+          } else {
+            Xt = transformer.fitTransform(Xt);
+          }
+        }
+      }
+    }
+
     if (yt === undefined) {
       throw new Error('y is undefined');
     }

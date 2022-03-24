@@ -167,7 +167,7 @@ function uniqueValuesIndicesAndCounts(x: Array<any>) {
 
 function expectedFraction(numPoints: number, trainTestRatio: number) {
   if (trainTestRatio < 1) {
-    console.warn('trainTestRatio typically greater than 1');
+    throw new Error('trainTestRatio typically greater than 1');
   }
   return clamp(
     ((numPoints - 1) * trainTestRatio - 1) /
