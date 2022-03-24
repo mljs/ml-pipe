@@ -75,9 +75,6 @@ export class Pipeline {
       }
     }
 
-    if (yt === undefined) {
-      throw new Error('y is undefined');
-    }
     const lastEstimator = this.getLastEstimator();
     if ('fit' in lastEstimator) {
       lastEstimator.fit(Xt, yt);
@@ -96,10 +93,9 @@ export class Pipeline {
       if ('transform' in transformer) {
         if (!(name === 'passthrough')) {
           if (transformer.onTarget === true) {
-            if (yt === undefined) {
-              throw new Error('y is undefined');
+            if (yt !== undefined) {
+              yt = transformer.transform(yt);
             }
-            yt = transformer.transform(yt);
           } else {
             Xt = transformer.transform(Xt);
           }
@@ -111,11 +107,23 @@ export class Pipeline {
 
   public predict(X: Matrix, y?: Matrix) {
     let { Xt } = this.transform(X, y);
+    let prediction;
     const lastEstimator = this.getLastEstimator();
     if ('predict' in lastEstimator) {
-      return lastEstimator.predict(Xt);
+      prediction = lastEstimator.predict(Xt);
     } else {
       throw new Error('last step of the pipeline is not an estimator');
     }
+    for (const step of this.steps.slice(0, -1)) {
+      let [name, transformer] = step;
+      if ('transform' in transformer) {
+        if (!(name === 'passthrough')) {
+          if (transformer.onTarget === true) {
+            prediction = transformer.inverseTransform(prediction);
+          }
+        }
+      }
+    }
+    return prediction;
   }
 }

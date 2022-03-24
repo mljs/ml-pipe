@@ -1,5 +1,8 @@
 import { LinearRegressor } from '../../estimators/linear/linearRegressor';
-import { StandardScaler } from '../../transformers/preprocessing/standardScaler';
+import {
+  StandardScaler,
+  TargetStandardScaler,
+} from '../../transformers/preprocessing/standardScaler';
 import { trainingSet, labels, correct } from '../../utils/testHelpers';
 import { Pipeline } from '../pipeline';
 
@@ -26,6 +29,18 @@ describe('test basic pipeline logic', () => {
   it('should be able to fit -- also with transformer', () => {
     const pipeline = new Pipeline([
       ['transformer', new StandardScaler()],
+      ['regressor', new LinearRegressor()],
+    ]);
+    void pipeline.fit(trainingSet, labels).then(() => {});
+    const predictions = pipeline.predict(trainingSet).to1DArray();
+    const score = correct(predictions, labels) / predictions.length;
+    expect(score).toBeGreaterThanOrEqual(0.7);
+  });
+
+  it('should be able to fit -- also with transformer and y-Transformer', () => {
+    const pipeline = new Pipeline([
+      ['transformer', new StandardScaler()],
+      ['yTransformer', new TargetStandardScaler()],
       ['regressor', new LinearRegressor()],
     ]);
     void pipeline.fit(trainingSet, labels).then(() => {});

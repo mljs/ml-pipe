@@ -18,7 +18,7 @@ import { trainTestSplit } from 'ml-pipe/modelSelection/trainTestSplit';
 import {Pipeline} from 'ml-pipe/pipeline';
 import {FCNN} from 'ml-pipe/estimators/neuralNetwork/fcnn'
 import {StandardScaler, TargetStandardScaler} from 'ml-pipe/transformers/preprocessing/standardScaler'
-
+import {meanSquaredError} from 'ml-pipe/metrics/regression'
 const {xTrain, xTest, yTrain, yTest} = trainTestSplit(x, y, 
     {trainFraction: 0.8,  stratify: yBinned})
 
@@ -31,6 +31,7 @@ const pipe = new Pipeline([
 
 await pipe.fit(XTrain, yTrain)
 const predictionsTest = pipe.predict(xTest)
+const mse = meanSquaredError(predictionsTest, yTest)
 ```
 
 
