@@ -1,20 +1,22 @@
 import { Matrix } from 'ml-matrix';
+import seedrandom from 'seedrandom';
 
 import { argSort, cumSum, repeat } from '../utils/array';
 import { clamp } from '../utils/number';
 
 export interface TrainTestSplitOptions {
-  trainFraction: number;
+  trainFraction?: number;
   stratify?: Matrix | Array<any>;
   shuffle?: boolean;
+  seed?: string;
 }
 
 export function trainTestSplit(
   x: Matrix,
   y: Matrix,
-  options: TrainTestSplitOptions,
+  options: TrainTestSplitOptions = {},
 ) {
-  let { trainFraction, stratify = false, shuffle = true } = options;
+  let { trainFraction = 0.8, stratify = false, shuffle = true, seed } = options;
   if (trainFraction <= 0) {
     throw new Error('trainFraction must be greater than 0');
   }
@@ -28,19 +30,20 @@ export function trainTestSplit(
     if (stratify instanceof Matrix) {
       stratify = stratify.to1DArray();
     }
-    if (stratify.length !== x.length) {
+    if (stratify.length !== x.rows) {
       throw new Error('stratify must have same length as x');
     }
     const { aIndices, bIndices } = getStratificationIndices(
       stratify,
       trainFraction / (1 - trainFraction),
+      seed,
     );
     trainIndices = aIndices;
     testIndices = bIndices;
   } else {
     let indices;
     if (shuffle) {
-      indices = generatedShuffledIndices(x);
+      indices = generatedShuffledIndices(x, seed);
     } else {
       indices = rangeFromArrayMatrix(x);
     }
@@ -66,18 +69,22 @@ export function trainTestSplit(
   return { trainX, trainY, testX, testY };
 }
 
-function shuffleArray(x: Array<any>) {
+function shuffleArray(x: Array<any>, seed?: string) {
   // Durstenfeld shuffle
+  const rng = seedrandom(seed);
   const array = [...x];
   for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rng() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
 }
 
-export function generatedShuffledIndices(x: Array<any> | Matrix) {
-  const shuffled = shuffleArray(rangeFromArrayMatrix(x));
+export function generatedShuffledIndices(
+  x: Array<any> | Matrix,
+  seed?: string,
+) {
+  const shuffled = shuffleArray(rangeFromArrayMatrix(x), seed);
   return shuffled;
 }
 
@@ -94,13 +101,14 @@ function rangeFromArrayMatrix(x: Array<any> | Matrix) {
 export function getStratificationIndices(
   stratifyArray: Array<any>,
   trainTestRatio: number,
+  seed?: string,
 ) {
   // todo:  complain if there is class with less than 2 points
   // todo: also complain if there is only one class
   // Stratified split implementation inspired by https://stackoverflow.com/questions/15838733/stratified-sampling-in-numpy
   // First we need to find the unique values in the array as well as their indices and counts
   const { indices, counts } = uniqueValuesIndicesAndCounts(stratifyArray);
-
+  const rng = seedrandom(seed);
   const blockCounts: Array<number> = Object.values(counts);
 
   const blocks = argSort(indices);
@@ -123,7 +131,7 @@ export function getStratificationIndices(
       thresholds[i + 1] = 0;
       setNext = false;
     } else {
-      thresholds[i] = Number(thresholds[i] > Math.random());
+      thresholds[i] = Number(thresholds[i] > rng());
     }
   }
   let aIndices: Array<number> = [];

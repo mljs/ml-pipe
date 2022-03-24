@@ -49,6 +49,7 @@
     "@tensorflow/tfjs": "^3.14.0",
     "ml-matrix": "^6.9.0",
     "ml-random-forest": "^2.1.0",
-    "ml-regression-multivariate-linear": "^2.0.3"
+    "ml-regression-multivariate-linear": "^2.0.3",
+    "seedrandom": "^2.4.4"
   }
 }
