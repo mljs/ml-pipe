@@ -19,17 +19,18 @@ import {Pipeline} from 'ml-pipe/pipeline';
 import {FCNN} from 'ml-pipe/estimators/neuralNetwork/fcnn'
 import {StandardScaler, TargetStandardScaler} from 'ml-pipe/transformers/preprocessing/standardScaler'
 
-let splits = trainTestSplit(x, y, 
-    {trainFraction: 0.8,  stratify:yBinned})
+const {xTrain, xTest, yTrain, yTest} = trainTestSplit(x, y, 
+    {trainFraction: 0.8,  stratify: yBinned})
+
 
 const pipe = new Pipeline([
     ('xScale', new StandardScaler()),
     ('yScale', new TargetStandardScaler()),
-    ('model', new FCNN(architectureOptions, trainingOptions))
+    ('model', new FCNN({inputSize: 5}))
 ])
 
-await pipe.fit(splits[0][0], splits[1][0])
-predictionsTest = pipe.predict(splits[0][1])
+await pipe.fit(XTrain, yTrain)
+const predictionsTest = pipe.predict(xTest)
 ```
 
 
