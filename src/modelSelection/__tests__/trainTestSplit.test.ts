@@ -1,5 +1,4 @@
-import { exp } from '@tensorflow/tfjs';
-import Matrix from 'ml-matrix';
+import { Matrix } from 'ml-matrix';
 
 import { repeat } from '../../utils/array';
 import {

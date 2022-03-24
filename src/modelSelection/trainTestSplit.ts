@@ -23,6 +23,9 @@ export function trainTestSplit(
   if (trainFraction >= 1) {
     throw new Error('trainFraction must be less than 1');
   }
+  if (x.rows !== y.rows) {
+    throw new Error('x and y must have the same number of rows');
+  }
   let trainIndices;
   let testIndices;
 
