@@ -5,12 +5,25 @@ import { argSort, cumSum, repeat } from '../utils/array';
 import { clamp } from '../utils/number';
 
 export interface TrainTestSplitOptions {
+  /** number greater than 0, smaller than 1, indicating the fraction of data used for the training settypically 0.8 */
   trainFraction?: number;
+  /** array of categories, e.g. class labels, which is used to stratifiy the holdout train/test split*/
   stratify?: Matrix | Array<any>;
+  /** If True, shuffle the data before splitting it. Recommended for most ML applications */
   shuffle?: boolean;
+  /** seed for random number generator */
   seed?: string;
 }
 
+/**
+ * Split a dataset into a train and test set.
+ *
+ * @export
+ * @param {Matrix} x - Feature matrix
+ * @param {Matrix} y - Target matrix
+ * @param {TrainTestSplitOptions} [options={}]
+ * @return {Matrix, Matrix, Matrix, Matrix} - xTrain xTest, yTrain yTest
+ */
 export function trainTestSplit(
   x: Matrix,
   y: Matrix,
