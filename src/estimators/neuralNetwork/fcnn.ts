@@ -129,15 +129,34 @@ function getModel(options: FCNNOptions): LayersModel {
   return model;
 }
 
+/**
+ * Implementation of a fully connected neural network using Tensorflow.js.
+ *
+ * @export
+ * @class FCNN
+ * @implements {Estimator}
+ */
 export class FCNN implements Estimator {
   private model: LayersModel;
   private options: FCNNOptions;
+
+  /**
+   * Creates an instance of FCNN.
+   * @param {FCNNOptions} options
+   * @memberof FCNN
+   */
   public constructor(options: FCNNOptions) {
     options = validateOptions(options);
     this.model = getModel(options);
     this.options = options;
   }
-
+  /**
+   * Trains the model.
+   *
+   * @param {Matrix} X - The feature matrix.
+   * @param {Matrix} y - The target matrix.
+   * @memberof FCNN
+   */
   public async fit(X: Matrix, y: Matrix) {
     this.model
       .fit(tensor2d(X.to2DArray()), tensor1d(y.to1DArray()), this.options)
@@ -145,7 +164,13 @@ export class FCNN implements Estimator {
         throw new Error(err.message);
       });
   }
-
+  /**
+   * Predicts the output for a given feature matrix.
+   *
+   * @param {Matrix} X - feature matrix
+   * @return {Matrix}
+   * @memberof FCNN
+   */
   public predict(X: Matrix) {
     let prediction = this.model.predict(tensor2d(X.to2DArray())) as Tensor2D;
     return new Matrix(prediction.arraySync());
