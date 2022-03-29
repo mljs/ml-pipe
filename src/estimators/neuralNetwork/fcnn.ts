@@ -11,22 +11,34 @@ import { Matrix } from 'ml-matrix';
 import { Estimator } from '../estimator';
 
 export interface FCNNOptions {
+  // The number of input features */
   inputShape: number;
+  // Length of array = number of hidden layers, each element is the number of neurons in that layer */
   hiddenShapes: number[];
+  // The number of outputs/targets. */
   outputShape: number;
+  // The activation function for the hidden layers. */
   hiddenActivation: 'relu' | 'sigmoid' | 'tanh' | 'linear';
+  // The activation function for the output layer. */
   finalActivation: 'relu' | 'sigmoid' | 'tanh' | 'linear';
+  // The initializer for the kernel weights. */
   kernelInitializer:
     | 'leCunNormal'
     | 'glorotUniform'
     | 'randomUniform'
     | 'truncatedNormal'
     | 'varianceScaling';
+  // The optimizer to use. */
   optimizer: 'sgd' | 'rmsprop' | 'adam' | 'adagrad' | 'adadelta';
+  // The loss function to use. */
   loss: 'meanSquaredError' | 'binaryCrossentropy' | 'categoricalCrossentropy';
+  // The number of epochs to train the model. */
   epochs: number;
+  // The learning rate for the optimizer. */
   learningRate: number;
+  // The batch size for the optimizer. */
   batchSize: number;
+  // The validation split for the model. (Can be used for early stopping) */
   validationSplit: number;
 }
 
