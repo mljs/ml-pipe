@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@tensorflow/tfjs": "^3.15.0",
-    "ml-matrix": "^6.9.0",
+    "ml-matrix": "^6.10.0",
     "ml-random-forest": "^2.1.0",
     "ml-regression-multivariate-linear": "^2.0.3",
     "seedrandom": "^3.0.5"
