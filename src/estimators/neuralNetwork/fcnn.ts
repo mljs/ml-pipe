@@ -57,26 +57,26 @@ function validateOptions(options: FCNNOptions) {
     validationSplit = 0.2,
     finalActivation = 'linear',
   } = options;
-  if (!(typeof inputShape === 'number')) {
+  if (typeof inputShape !== 'number') {
     throw new Error('inputShape must be a number');
   }
   if (inputShape <= 0) {
     throw new Error('inputShape must be greater than 0');
   }
 
-  if (!(validationSplit < 1 && validationSplit > 0)) {
+  if (validationSplit <= 0 || validationSplit >= 1) {
     throw new Error('validationSplit must be between 0 and 1');
   }
 
-  if (!(batchSize > 0)) {
+  if (batchSize <= 0) {
     throw new Error('batchSize must be greater than 0');
   }
 
-  if (!(epochs > 0)) {
+  if (epochs <= 0) {
     throw new Error('epochs must be greater than 0');
   }
 
-  if (!(learningRate > 0)) {
+  if (learningRate <= 0) {
     throw new Error('learningRate must be greater than 0');
   }
 
