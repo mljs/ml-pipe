@@ -1,6 +1,5 @@
 import { Matrix } from 'ml-matrix';
 
-import { columnWiseMax, columnWiseMin } from '../../utils/colStat';
 import { OperationSteps, operationChain } from '../../utils/vectorMatrix';
 import { turnZerosToOnes } from '../../utils/zerosToOnes';
 import { Transformer } from '../transformer';
@@ -17,8 +16,8 @@ export class MinMaxScaler implements Transformer {
   }
 
   public fit(X: Matrix) {
-    this.min = columnWiseMin(X);
-    const max = columnWiseMax(X);
+    this.min = X.min('column');
+    const max = X.max('column');
 
     // we turn zeros to ones to avoid division by zero
     this.range = turnZerosToOnes(max.map((v, i) => v - this.min[i]));
