@@ -3,7 +3,7 @@ import { Matrix } from 'ml-matrix';
 export function columnWiseMin(matrix: Matrix): number[] {
   let mins = [];
   for (let i = 0; i < matrix.columns; i++) {
-    let min = Number.MAX_VALUE;
+    let min = Number.POSITIVE_INFINITY;
     for (let j = 0; j < matrix.rows; j++) {
       min = Math.min(min, matrix.get(j, i));
     }
@@ -15,7 +15,7 @@ export function columnWiseMin(matrix: Matrix): number[] {
 export function columnWiseMax(matrix: Matrix): number[] {
   let maxes = [];
   for (let i = 0; i < matrix.columns; i++) {
-    let max = Number.MIN_VALUE;
+    let max = Number.NEGATIVE_INFINITY;
     for (let j = 0; j < matrix.rows; j++) {
       max = Math.max(max, matrix.get(j, i));
     }
