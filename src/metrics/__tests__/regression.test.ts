@@ -1,6 +1,8 @@
 import { Matrix } from 'ml-matrix';
 
-import { meanAbsoluteError, meanSquaredError } from '../regression';
+import { LinearRegressor } from '../../estimators/linear/linearRegressor';
+import { trainingSet, labels } from '../../utils/testHelpers';
+import { meanAbsoluteError, meanSquaredError, doFAIC } from '../regression';
 
 describe('test meanSquaredError', () => {
   it('should return 0 for equal matrices', () => {
@@ -27,5 +29,14 @@ describe('test meanAbsoluteError', () => {
     const y = Matrix.from1DArray(2, 1, [1, 2]);
     const yHat = Matrix.from1DArray(2, 1, [2, 3]);
     expect(meanAbsoluteError(y, yHat)).toBe(1);
+  });
+});
+
+describe('test doFAIC', () => {
+  it('linear model - make sure the call to the function works', async () => {
+    const regressor = new LinearRegressor();
+    await regressor.fit(trainingSet, labels);
+    const faic = await doFAIC(trainingSet, labels, regressor);
+    expect(faic).toBeGreaterThanOrEqual(2);
   });
 });
