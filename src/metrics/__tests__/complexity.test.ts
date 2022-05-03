@@ -12,7 +12,7 @@ describe('test generalized degrees of freedom', () => {
       labels,
       regressor,
     );
-    expect(gdf).toBeGreaterThanOrEqual(2);
+    expect(gdf).toBeGreaterThanOrEqual(1);
   });
 
   it('on random forest regressor', async () => {
@@ -30,6 +30,6 @@ describe('test generalized degrees of freedom', () => {
       labels,
       regressor,
     );
-    expect(gdf).toBeGreaterThanOrEqual(10);
+    expect(gdf).toBeGreaterThanOrEqual(9);
   });
 });
