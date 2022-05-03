@@ -6,7 +6,7 @@ import { Estimator } from '../estimator';
 export class RandomForestRegressor implements Estimator {
   private options: any;
   private regressor: RandomForestRegression;
-  public constructor(options: any) {
+  public constructor(options: any = {}) {
     this.options = options;
     this.regressor = new RandomForestRegression(options);
   }
@@ -16,6 +16,6 @@ export class RandomForestRegressor implements Estimator {
   }
 
   public predict(X: Matrix) {
-    return new Matrix([this.regressor.predict(X.to2DArray())]);
+    return Matrix.from1DArray(X.rows, 1, this.regressor.predict(X.to2DArray()));
   }
 }
