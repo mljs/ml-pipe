@@ -11,42 +11,36 @@ import { Matrix } from 'ml-matrix';
 import { Estimator } from '../estimator';
 
 export interface FCNNOptions {
-  // The number of input features */
-  inputShape: number;
   // Length of array = number of hidden layers, each element is the number of neurons in that layer */
-  hiddenShapes: number[];
-  // The number of outputs/targets. */
-  outputShape: number;
+  hiddenShapes?: number[];
   // The activation function for the hidden layers. */
-  hiddenActivation: 'relu' | 'sigmoid' | 'tanh' | 'linear';
+  hiddenActivation?: 'relu' | 'sigmoid' | 'tanh' | 'linear';
   // The activation function for the output layer. */
-  finalActivation: 'relu' | 'sigmoid' | 'tanh' | 'linear';
+  finalActivation?: 'relu' | 'sigmoid' | 'tanh' | 'linear';
   // The initializer for the kernel weights. */
-  kernelInitializer:
+  kernelInitializer?:
     | 'leCunNormal'
     | 'glorotUniform'
     | 'randomUniform'
     | 'truncatedNormal'
     | 'varianceScaling';
   // The optimizer to use. */
-  optimizer: 'sgd' | 'rmsprop' | 'adam' | 'adagrad' | 'adadelta';
+  optimizer?: 'sgd' | 'rmsprop' | 'adam' | 'adagrad' | 'adadelta';
   // The loss function to use. */
-  loss: 'meanSquaredError' | 'binaryCrossentropy' | 'categoricalCrossentropy';
+  loss?: 'meanSquaredError' | 'binaryCrossentropy' | 'categoricalCrossentropy';
   // The number of epochs to train the model. */
-  epochs: number;
+  epochs?: number;
   // The learning rate for the optimizer. */
-  learningRate: number;
+  learningRate?: number;
   // The batch size for the optimizer. */
-  batchSize: number;
+  batchSize?: number;
   // The validation split for the model. (Can be used for early stopping) */
-  validationSplit: number;
+  validationSplit?: number;
 }
 
 function validateOptions(options: FCNNOptions) {
   let {
-    inputShape,
     hiddenShapes = [32, 32],
-    outputShape = 1,
     hiddenActivation = 'relu',
     kernelInitializer = 'glorotUniform',
     optimizer = 'adam',
@@ -57,12 +51,6 @@ function validateOptions(options: FCNNOptions) {
     validationSplit = 0.2,
     finalActivation = 'linear',
   } = options;
-  if (typeof inputShape !== 'number') {
-    throw new Error('inputShape must be a number');
-  }
-  if (inputShape <= 0) {
-    throw new Error('inputShape must be greater than 0');
-  }
 
   if (validationSplit <= 0 || validationSplit >= 1) {
     throw new Error('validationSplit must be between 0 and 1');
@@ -81,9 +69,8 @@ function validateOptions(options: FCNNOptions) {
   }
 
   return {
-    inputShape: inputShape,
     hiddenShapes: hiddenShapes,
-    outputShape: outputShape,
+
     hiddenActivation: hiddenActivation,
     kernelInitializer: kernelInitializer,
     optimizer: optimizer,
@@ -96,11 +83,26 @@ function validateOptions(options: FCNNOptions) {
   };
 }
 
-function getModel(options: FCNNOptions): LayersModel {
+function getModel(
+  inputShape: number,
+  outputShape: number,
+  options: any,
+): LayersModel {
   const model = sequential();
+  if (!options.hiddenShapes) {
+    throw new Error('hiddenShapes must be defined');
+  }
+
+  if (!options.optimizer) {
+    throw new Error('optimizer must be defined');
+  }
+
+  if (!options.loss) {
+    throw new Error('loss must be defined');
+  }
   model.add(
     layers.dense({
-      inputShape: [options.inputShape],
+      inputShape: [inputShape],
       units: options.hiddenShapes[0],
       activation: options.hiddenActivation,
       kernelInitializer: options.kernelInitializer,
@@ -117,7 +119,7 @@ function getModel(options: FCNNOptions): LayersModel {
   }
   model.add(
     layers.dense({
-      units: options.outputShape,
+      units: outputShape,
       activation: options.finalActivation,
       kernelInitializer: options.kernelInitializer,
     }),
@@ -137,7 +139,7 @@ function getModel(options: FCNNOptions): LayersModel {
  * @implements {Estimator}
  */
 export class FCNN implements Estimator {
-  private model: LayersModel;
+  private model: LayersModel | undefined;
   private options: FCNNOptions;
 
   /**
@@ -147,8 +149,8 @@ export class FCNN implements Estimator {
    */
   public constructor(options: FCNNOptions) {
     options = validateOptions(options);
-    this.model = getModel(options);
     this.options = options;
+    this.model = undefined;
   }
   /**
    * Trains the model.
@@ -158,6 +160,7 @@ export class FCNN implements Estimator {
    * @memberof FCNN
    */
   public async fit(X: Matrix, y: Matrix) {
+    this.model = getModel(X.columns, y.columns, this.options);
     this.model
       .fit(tensor2d(X.to2DArray()), tensor1d(y.to1DArray()), this.options)
       .catch((err) => {
@@ -172,6 +175,9 @@ export class FCNN implements Estimator {
    * @memberof FCNN
    */
   public predict(X: Matrix) {
+    if (!this.model) {
+      throw new Error('Model not trained');
+    }
     let prediction = this.model.predict(tensor2d(X.to2DArray())) as Tensor2D;
     return new Matrix(prediction.arraySync());
   }

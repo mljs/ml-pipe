@@ -3,9 +3,9 @@ import { trainingSet, labels, correct } from '../../../utils/testHelpers';
 import { FCNN, FCNNOptions } from '../fcnn';
 
 const fcnnOptions: FCNNOptions = {
-  inputShape: 3,
+  //inputShape: 3,
   hiddenShapes: [64, 64, 32],
-  outputShape: 1,
+  //outputShape: 1,
   hiddenActivation: 'relu',
   finalActivation: 'linear',
   kernelInitializer: 'glorotUniform',
