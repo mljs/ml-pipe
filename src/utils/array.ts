@@ -1,5 +1,10 @@
+// leave only index
+import { Matrix } from 'ml-matrix';
+
+import { gaussRandom } from './number';
+
 const decorateWIndex = (v: number, i: number) => [v, i];
-const removeDecoration = (a: Array<any>) => a[1]; // leave only index
+const removeDecoration = (a: Array<any>) => a[1];
 
 export function argSort(
   arr: Array<number>,
@@ -27,4 +32,15 @@ export function cumSum(arr: Array<number>): Array<number> {
 
 export function repeat(arr: Array<any>, times: Array<number>): Array<any> {
   return arr.flatMap((e, index) => Array(times[index]).fill(e));
+}
+
+export function randomGaussianMatrix(
+  rows: number,
+  cols: number,
+  epsilon = 1e-5,
+): Matrix {
+  let arr = Array(rows * cols)
+    .fill(0)
+    .map(() => gaussRandom() * epsilon);
+  return Matrix.from1DArray(rows, cols, arr);
 }

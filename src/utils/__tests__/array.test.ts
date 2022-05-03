@@ -1,4 +1,6 @@
-import { argSort, repeat } from '../array';
+import { exp } from '@tensorflow/tfjs';
+
+import { argSort, repeat, randomGaussianMatrix } from '../array';
 
 describe('test argsort', () => {
   it('test argsort - default ascending', () => {
@@ -25,5 +27,15 @@ describe('test repeat', () => {
     const array = [1, 2, 3];
     const repeated = repeat(array, [1, 1, 1]);
     expect(repeated).toStrictEqual([1, 2, 3]);
+  });
+});
+
+describe('test random gaussian matrix', () => {
+  it('make sure we get approx zero mean', () => {
+    const matrix = randomGaussianMatrix(10, 10);
+    expect(matrix.rows).toBe(10);
+    expect(matrix.columns).toBe(10);
+    const mean = matrix.mean();
+    expect(mean).toBeCloseTo(0, 5);
   });
 });
