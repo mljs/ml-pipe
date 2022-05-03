@@ -7,15 +7,17 @@ import { randomGaussianMatrix } from '../utils/array';
  * Computes generalized degrees of freedom as originally proposed in [1].
  * Here, we use a Monte Carlo approximation, as described in [2]
  *
+ * Note that the model is retrained multiple times, which can take time.
+ * Also, the model state changes due to this process.
  *
  * [1] Ye, Jianming. “On Measuring and Correcting the Effects of Data Mining and Model Selection.” Journal of the American Statistical Association, vol. 93, no. 441, 1998, pp. 120–31, https://doi.org/10.2307/2669609. Accessed 3 May 2022.
  * [2] Gao, Tianxiang, και Vladimir Jojic. ‘Degrees of Freedom in Deep Neural Networks’. arXiv preprint arXiv: Arxiv-1603. 09260 (2016): n. pag. Print.
  * @export
- * @param {Matrix} X
- * @param {Matrix} Y
- * @param {(Estimator | Pipeline)} estimator
- * @param {1e-5} epsilon
- * @param {5} numberOfDraws
+ * @param {Matrix} X Input data (Features)
+ * @param {Matrix} Y Input data (Labels)
+ * @param {(Estimator | Pipeline)} estimator Estimator to use
+ * @param {1e-5} epsilon Epsilon of the Tailor expansion
+ * @param {5} numberOfDraws number of Monte Carlo draws
  * @return {*}  {Promise<number>}
  */
 export async function generalizedDegreesOfFreedom(
@@ -47,7 +49,7 @@ async function gdfEstimate(
   estimator: Estimator | Pipeline,
   epsilon: number,
 ): Promise<number> {
-  const clonedEstimator = estimator; // structuredClone(estimator);
+  const clonedEstimator = estimator; //structuredClone(estimator);
   const B = randomGaussianMatrix(Y.rows, Y.columns);
   const Ypert = Matrix.add(Y, Matrix.mul(B, epsilon));
 
