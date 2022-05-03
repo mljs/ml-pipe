@@ -11,7 +11,7 @@ import { randomGaussianMatrix } from '../utils/array';
  * Also, the model state changes due to this process.
  *
  * [1] Ye, Jianming. “On Measuring and Correcting the Effects of Data Mining and Model Selection.” Journal of the American Statistical Association, vol. 93, no. 441, 1998, pp. 120–31, https://doi.org/10.2307/2669609. Accessed 3 May 2022.
- * [2] Gao, Tianxiang, και Vladimir Jojic. ‘Degrees of Freedom in Deep Neural Networks’. arXiv preprint arXiv: Arxiv-1603. 09260 (2016): n. pag. Print.
+ * [2] Gao, Tianxiang,  Vladimir Jojic. ‘Degrees of Freedom in Deep Neural Networks’. arXiv preprint arXiv: Arxiv-1603. 09260 (2016): n. pag. Print.
  * @export
  * @param {Matrix} X Input data (Features)
  * @param {Matrix} Y Input data (Labels)
