@@ -1,5 +1,3 @@
-import { exp } from '@tensorflow/tfjs';
-
 import { argSort, repeat, randomGaussianMatrix } from '../array';
 
 describe('test argsort', () => {
@@ -36,6 +34,6 @@ describe('test random gaussian matrix', () => {
     expect(matrix.rows).toBe(10);
     expect(matrix.columns).toBe(10);
     const mean = matrix.mean();
-    expect(mean).toBeCloseTo(0, 5);
+    expect(mean).toBeCloseTo(0, 0.1);
   });
 });

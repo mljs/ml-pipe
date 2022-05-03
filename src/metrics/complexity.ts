@@ -2,7 +2,7 @@ import { Matrix } from 'ml-matrix';
 
 import { Estimator } from '../estimators/estimator';
 import { Pipeline } from '../pipeline/pipeline';
-
+import { randomGaussianMatrix } from '../utils/array';
 /**
  * Computes generalized degrees of freedom as originally proposed in [1].
  * Here, we use a Monte Carlo approximation, as described in [2]
@@ -14,7 +14,7 @@ import { Pipeline } from '../pipeline/pipeline';
  * @param {Matrix} X
  * @param {Matrix} Y
  * @param {(Estimator | Pipeline)} estimator
- * @param {number} epsilon
+ * @param {1e-5} epsilon
  * @param {5} numberOfDraws
  * @return {*}  {Promise<number>}
  */
@@ -22,12 +22,19 @@ export async function generalizedDegreesOfFreedom(
   X: Matrix,
   Y: Matrix,
   estimator: Estimator | Pipeline,
-  epsilon: number,
-  numberOfDraws: 5,
+  epsilon = 1e-3,
+  numberOfDraws = 5,
 ): Promise<number> {
-  let gdfEstimates = Matrix.zeros(0, numberOfDraws);
+  const unperturbedPredictions = estimator.predict(X);
+  let gdfEstimates = Matrix.zeros(1, numberOfDraws);
   for (let i = 0; i < numberOfDraws; i++) {
-    const estimate = await gdfEstimate(X, Y, estimator, epsilon);
+    const estimate = await gdfEstimate(
+      X,
+      Y,
+      unperturbedPredictions,
+      estimator,
+      epsilon,
+    );
     gdfEstimates.set(0, i, estimate);
   }
   return gdfEstimates.mean();
@@ -36,14 +43,26 @@ export async function generalizedDegreesOfFreedom(
 async function gdfEstimate(
   X: Matrix,
   Y: Matrix,
+  unperturbedPredictions: Matrix,
   estimator: Estimator | Pipeline,
   epsilon: number,
 ): Promise<number> {
-  await estimator.fit(X, Y);
+  const clonedEstimator = estimator; // structuredClone(estimator);
+  const B = randomGaussianMatrix(Y.rows, Y.columns);
+  const Ypert = Matrix.add(Y, Matrix.mul(B, epsilon));
 
-  const predictions = estimator.predict(X);
-  let residuals = Y.sub(predictions);
-  residuals = residuals.div(epsilon);
-  const sumOfResiduals = residuals.sum();
-  return sumOfResiduals;
+  await clonedEstimator.fit(X, Ypert);
+
+  const predictions = clonedEstimator.predict(X);
+
+  let residuals = 0;
+  for (let i = 0; i < B.rows; i++) {
+    for (let j = 0; j < B.columns; j++) {
+      residuals +=
+        (B.get(i, j) *
+          (predictions.get(i, j) - unperturbedPredictions.get(i, j))) /
+        epsilon;
+    }
+  }
+  return residuals;
 }

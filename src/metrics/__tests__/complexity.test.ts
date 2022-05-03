@@ -1,0 +1,16 @@
+import { LinearRegressor } from '../../estimators/linear/linearRegressor';
+import { trainingSet, labels } from '../../utils/testHelpers';
+import { generalizedDegreesOfFreedom } from '../complexity';
+
+describe('test generalized degrees of freedom', () => {
+  it('on linear regressor', async () => {
+    const regressor = new LinearRegressor();
+    await regressor.fit(trainingSet, labels);
+    const gdf = await generalizedDegreesOfFreedom(
+      trainingSet,
+      labels,
+      regressor,
+    );
+    expect(gdf).toBeGreaterThanOrEqual(2);
+  });
+});

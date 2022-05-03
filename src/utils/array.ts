@@ -34,13 +34,9 @@ export function repeat(arr: Array<any>, times: Array<number>): Array<any> {
   return arr.flatMap((e, index) => Array(times[index]).fill(e));
 }
 
-export function randomGaussianMatrix(
-  rows: number,
-  cols: number,
-  epsilon = 1e-5,
-): Matrix {
+export function randomGaussianMatrix(rows: number, cols: number): Matrix {
   let arr = Array(rows * cols)
     .fill(0)
-    .map(() => gaussRandom() * epsilon);
+    .map(() => gaussRandom());
   return Matrix.from1DArray(rows, cols, arr);
 }
