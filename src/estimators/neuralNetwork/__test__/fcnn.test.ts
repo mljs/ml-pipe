@@ -1,6 +1,6 @@
-import { StandardScaler } from '../../../transformers/preprocessing/standardScaler';
+import { StandardScaler } from '../../../transformers/preprocessing/StandardScaler';
 import { trainingSet, labels, correct } from '../../../utils/testHelpers';
-import { FCNN, FCNNOptions } from '../fcnn';
+import { FCNN, FCNNOptions } from '../FCNN';
 
 const fcnnOptions: FCNNOptions = {
   //inputShape: 3,

@@ -1,8 +1,8 @@
-import { LinearRegressor } from '../../estimators/linear/linearRegressor';
+import { LinearRegressor } from '../../estimators/linear/LinearRegressor';
 import {
   StandardScaler,
   TargetStandardScaler,
-} from '../../transformers/preprocessing/standardScaler';
+} from '../../transformers/preprocessing/StandardScaler';
 import { trainingSet, labels, correct } from '../../utils/testHelpers';
 import { Pipeline } from '../pipeline';
 

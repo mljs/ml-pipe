@@ -1,5 +1,5 @@
-import { RandomForestRegressor } from '../../estimators/ensemble/randomForestRegressor';
-import { LinearRegressor } from '../../estimators/linear/linearRegressor';
+import { RandomForestRegressor } from '../../estimators/ensemble/RandomForestRegressor';
+import { LinearRegressor } from '../../estimators/linear/LinearRegressor';
 import { trainingSet, labels } from '../../utils/testHelpers';
 import { generalizedDegreesOfFreedom } from '../complexity';
 
@@ -16,14 +16,7 @@ describe('test generalized degrees of freedom', () => {
   });
 
   it('on random forest regressor', async () => {
-    const regressor = new RandomForestRegressor({
-      seed: 3,
-      maxFeatures: 2,
-      replacement: false,
-      nEstimators: 200,
-      treeOptions: undefined,
-      useSampleBagging: true,
-    });
+    const regressor = new RandomForestRegressor();
     await regressor.fit(trainingSet, labels);
     const gdf = await generalizedDegreesOfFreedom(
       trainingSet,

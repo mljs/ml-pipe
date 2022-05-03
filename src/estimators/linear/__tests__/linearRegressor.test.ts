@@ -1,5 +1,5 @@
 import { trainingSet, labels, correct } from '../../../utils/testHelpers';
-import { LinearRegressor } from '../linearRegressor';
+import { LinearRegressor } from '../LinearRegressor';
 
 describe('test linear regressor', () => {
   it('on test data', () => {

@@ -8,7 +8,7 @@ import {
 } from '@tensorflow/tfjs';
 import { Matrix } from 'ml-matrix';
 
-import { Estimator } from '../estimator';
+import { Estimator } from '../Estimator';
 
 export interface FCNNOptions {
   // Length of array = number of hidden layers, each element is the number of neurons in that layer */

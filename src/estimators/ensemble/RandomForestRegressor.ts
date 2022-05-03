@@ -1,7 +1,7 @@
 import { Matrix } from 'ml-matrix';
 import { RandomForestRegression } from 'ml-random-forest';
 
-import { Estimator } from '../estimator';
+import { Estimator } from '../Estimator';
 
 export class RandomForestRegressor implements Estimator {
   private options: any;

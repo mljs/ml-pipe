@@ -1,7 +1,7 @@
 import { Matrix } from 'ml-matrix';
 import MLR from 'ml-regression-multivariate-linear';
 
-import { Estimator } from '../estimator';
+import { Estimator } from '../Estimator';
 
 export class LinearRegressor implements Estimator {
   private intercept: boolean;

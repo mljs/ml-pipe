@@ -1,6 +1,6 @@
 import { Matrix } from 'ml-matrix';
 
-import { StandardScaler } from '../standardScaler';
+import { StandardScaler } from '../StandardScaler';
 
 describe('test StandardScaler', () => {
   it('two cols', () => {

@@ -1,6 +1,6 @@
 import { Matrix } from 'ml-matrix';
 
-import { Estimator } from '../estimators/estimator';
+import { Estimator } from '../estimators/Estimator';
 import { Pipeline } from '../pipeline/pipeline';
 import { randomGaussianMatrix } from '../utils/array';
 /**

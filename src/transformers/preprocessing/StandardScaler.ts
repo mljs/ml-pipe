@@ -2,7 +2,7 @@ import { Matrix } from 'ml-matrix';
 
 import { OperationSteps, operationChain } from '../../utils/vectorMatrix';
 import { turnZerosToOnes } from '../../utils/zerosToOnes';
-import { Transformer } from '../transformer';
+import { Transformer } from '../Transformer';
 
 export class StandardScaler implements Transformer {
   private std: number[];

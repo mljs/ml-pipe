@@ -1,6 +1,6 @@
 import { Matrix } from 'ml-matrix';
 
-import { MinMaxScaler } from '../minMaxScaler';
+import { MinMaxScaler } from '../MinMaxScaler';
 
 describe('test MinMaxScaler', () => {
   it('two cols', () => {

@@ -1,7 +1,7 @@
 import { Matrix } from 'ml-matrix';
 
-import { Estimator } from '../estimators/estimator';
-import { Transformer } from '../transformers/transformer';
+import { Estimator } from '../estimators/Estimator';
+import { Transformer } from '../transformers/Transformer';
 // Implementation inspired by scikitjs
 
 export class Pipeline {

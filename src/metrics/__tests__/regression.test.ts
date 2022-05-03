@@ -1,6 +1,6 @@
 import { Matrix } from 'ml-matrix';
 
-import { LinearRegressor } from '../../estimators/linear/linearRegressor';
+import { LinearRegressor } from '../../estimators/linear/LinearRegressor';
 import { trainingSet, labels } from '../../utils/testHelpers';
 import { meanAbsoluteError, meanSquaredError, doFAIC } from '../regression';
 

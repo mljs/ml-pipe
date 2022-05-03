@@ -1,5 +1,5 @@
 import { trainingSet, labels, correct } from '../../../utils/testHelpers';
-import { RandomForestRegressor } from '../randomForestRegressor';
+import { RandomForestRegressor } from '../RandomForestRegressor';
 
 // Test taken from the ml-rf package
 
