@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.0](https://github.com/mljs/ml-pipe/compare/v0.0.1...v0.1.0) (2022-05-03)
+
+
+### Features
+
+* first GDF draft ([4901214](https://github.com/mljs/ml-pipe/commit/490121425189d3c13880b12b92cad965926f0f22))
+* first implementation of doFAIC ([b0d605c](https://github.com/mljs/ml-pipe/commit/b0d605c577bbc7047f513610268daea3d41ba82b))
+* implement basic regression metrics ([65b74b6](https://github.com/mljs/ml-pipe/commit/65b74b6e57d426ae5d3fdf9516845f404eb15d4c))
+* implemented random Gaussian matrix ([328d707](https://github.com/mljs/ml-pipe/commit/328d707e8fb304e29503bbaef1f60d7e629cb757))
+* inital implementation of GDF ([a57a0b1](https://github.com/mljs/ml-pipe/commit/a57a0b1b7fafbd4d310eebc41a47ab9e0081ae26))
+
+
+### Bug Fixes
+
+* close [#17](https://github.com/mljs/ml-pipe/issues/17) ([4122d8d](https://github.com/mljs/ml-pipe/commit/4122d8d62a31fb3ad3462e479e0f40787c968353))
+* random forest output shape ([22dfa19](https://github.com/mljs/ml-pipe/commit/22dfa19ae39aa1de3e6fcfdb292223c86987f0d6))
+
 ### 0.0.1 (2022-04-13)
 
 
