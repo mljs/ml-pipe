@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/mljs/ml-pipe/compare/v0.1.0...v0.2.0) (2022-05-17)
+
+
+### Features
+
+* compile NN upon fit call ([d15b12c](https://github.com/mljs/ml-pipe/commit/d15b12cc1d6f7007b335caa7ab8acf30ccf621fb))
+
+
+### Bug Fixes
+
+* unfitted NN problem ([c202e0e](https://github.com/mljs/ml-pipe/commit/c202e0ecda0a8d729f18b8ca6d02ae0ca172bda7))
+
 ## [0.1.0](https://github.com/mljs/ml-pipe/compare/v0.0.1...v0.1.0) (2022-05-03)
 
 
