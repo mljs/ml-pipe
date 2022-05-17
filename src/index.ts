@@ -1,6 +1,6 @@
 export { meanAbsoluteError, meanSquaredError } from './metrics/regression';
 export { generalizedDegreesOfFreedom } from './metrics/complexity';
-export { Pipeline } from './pipeline/pipeline';
+export { Pipeline } from './pipeline/Pipeline';
 export { Estimator } from './estimators/Estimator';
 export { Transformer } from './transformers/Transformer';
 

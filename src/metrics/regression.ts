@@ -1,7 +1,7 @@
 import { Matrix } from 'ml-matrix';
 
 import { Estimator } from '../estimators/Estimator';
-import { Pipeline } from '../pipeline/pipeline';
+import { Pipeline } from '../pipeline/Pipeline';
 
 import { generalizedDegreesOfFreedom } from './complexity';
 

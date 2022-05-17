@@ -74,10 +74,13 @@ export class Pipeline {
         }
       }
     }
+    await this.fitLastEstimator(Xt, yt);
+  }
 
+  private async fitLastEstimator(x: Matrix, y: Matrix) {
     const lastEstimator = this.getLastEstimator();
     if ('fit' in lastEstimator) {
-      lastEstimator.fit(Xt, yt);
+      await lastEstimator.fit(x, y);
     } else {
       throw new Error('last step of the pipeline is not an estimator');
     }
@@ -87,7 +90,6 @@ export class Pipeline {
   public transform(X: Matrix, y?: Matrix) {
     let Xt = X;
     let yt = y;
-
     for (const step of this.steps.slice(0, -1)) {
       let [name, transformer] = step;
       if ('transform' in transformer) {
@@ -107,6 +109,7 @@ export class Pipeline {
 
   public predict(X: Matrix, y?: Matrix) {
     let { Xt } = this.transform(X, y);
+
     let prediction;
     const lastEstimator = this.getLastEstimator();
     if ('predict' in lastEstimator) {
@@ -114,6 +117,7 @@ export class Pipeline {
     } else {
       throw new Error('last step of the pipeline is not an estimator');
     }
+
     for (const step of this.steps.slice(0, -1)) {
       let [name, transformer] = step;
       if ('transform' in transformer) {

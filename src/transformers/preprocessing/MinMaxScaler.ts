@@ -8,11 +8,13 @@ export class MinMaxScaler implements Transformer {
   private min: number[];
   private range: number[];
   public onTarget: boolean;
+  public fitted: boolean;
 
   public constructor(onTarget?: boolean) {
     this.onTarget = onTarget || false;
     this.min = [];
     this.range = [];
+    this.fitted = false;
   }
 
   public fit(X: Matrix) {
@@ -21,6 +23,7 @@ export class MinMaxScaler implements Transformer {
 
     // we turn zeros to ones to avoid division by zero
     this.range = turnZerosToOnes(max.map((v, i) => v - this.min[i]));
+    this.fitted = true;
   }
 
   public transform(X: Matrix) {

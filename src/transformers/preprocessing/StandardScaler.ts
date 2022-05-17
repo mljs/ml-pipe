@@ -8,11 +8,13 @@ export class StandardScaler implements Transformer {
   private std: number[];
   private mean: number[];
   public onTarget: boolean;
+  public fitted: boolean;
 
   public constructor(onTarget?: boolean) {
     this.onTarget = onTarget || false;
     this.std = [];
     this.mean = [];
+    this.fitted = false;
   }
 
   public fit(X: Matrix) {
@@ -22,6 +24,7 @@ export class StandardScaler implements Transformer {
       X.standardDeviation('column', { unbiased: false }),
     );
     this.mean = X.mean('column');
+    this.fitted = true;
   }
 
   public transform(X: Matrix) {

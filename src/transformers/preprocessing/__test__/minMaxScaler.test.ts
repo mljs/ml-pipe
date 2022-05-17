@@ -20,10 +20,12 @@ describe('test MinMaxScaler', () => {
       [1, 1],
     ]);
 
-    expect(scaler.transform(data)).toStrictEqual(expected);
+    const transformed = scaler.transform(data);
+    expect(transformed).toStrictEqual(expected);
     expect(scaler.transform(new Matrix([[2, 2]]))).toStrictEqual(
       new Matrix([[2, 2]]),
     );
+    expect(scaler.inverseTransform(transformed)).toStrictEqual(data);
   });
 
   it('constant column', () => {
@@ -33,6 +35,9 @@ describe('test MinMaxScaler', () => {
     scaler.fit(data);
     const expected = new Matrix([[0, 0, 0, 0, 0, 0, 0, 0]]);
 
-    expect(scaler.transform(data)).toStrictEqual(expected);
+    const transformed = scaler.transform(data);
+    expect(transformed).toStrictEqual(expected);
+
+    expect(scaler.inverseTransform(transformed)).toStrictEqual(data);
   });
 });

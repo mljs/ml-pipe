@@ -141,6 +141,7 @@ function getModel(
 export class FCNN implements Estimator {
   private model: LayersModel | undefined;
   private options: FCNNOptions;
+  public fitted: boolean;
 
   /**
    * Creates an instance of FCNN.
@@ -151,6 +152,7 @@ export class FCNN implements Estimator {
     options = validateOptions(options);
     this.options = options;
     this.model = undefined;
+    this.fitted = false;
   }
   /**
    * Trains the model.
@@ -166,6 +168,8 @@ export class FCNN implements Estimator {
       .catch((err) => {
         throw new Error(err.message);
       });
+    this.fitted = true;
+    return history;
   }
   /**
    * Predicts the output for a given feature matrix.
