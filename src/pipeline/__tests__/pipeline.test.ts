@@ -1,3 +1,5 @@
+import seedrandom from 'seedrandom';
+
 import { RandomForestRegressor } from '../../estimators/ensemble/RandomForestRegressor';
 import { LinearRegressor } from '../../estimators/linear/LinearRegressor';
 import { FCNN } from '../../estimators/neuralNetwork/FCNN';
@@ -9,6 +11,7 @@ import { trainingSet, labels, correct } from '../../utils/testHelpers';
 import { Pipeline } from '../Pipeline';
 
 describe('test basic pipeline logic', () => {
+  seedrandom('test');
   it('invalid pipeline', () => {
     expect(() => {
       new Pipeline([['bla', new StandardScaler()]]);
