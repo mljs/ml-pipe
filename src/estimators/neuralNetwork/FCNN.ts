@@ -139,7 +139,7 @@ function getModel(
  * @implements {Estimator}
  */
 export class FCNN implements Estimator {
-  private model: LayersModel | undefined;
+  public model: LayersModel | undefined;
   private options: FCNNOptions;
   public fitted: boolean;
 
@@ -163,7 +163,7 @@ export class FCNN implements Estimator {
    */
   public async fit(X: Matrix, y: Matrix) {
     this.model = getModel(X.columns, y.columns, this.options);
-    this.model
+    let history = this.model
       .fit(tensor2d(X.to2DArray()), tensor1d(y.to1DArray()), this.options)
       .catch((err) => {
         throw new Error(err.message);

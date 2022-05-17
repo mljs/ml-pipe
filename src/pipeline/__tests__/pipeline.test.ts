@@ -1,4 +1,6 @@
+import { RandomForestRegressor } from '../../estimators/ensemble/RandomForestRegressor';
 import { LinearRegressor } from '../../estimators/linear/LinearRegressor';
+import { FCNN } from '../../estimators/neuralNetwork/FCNN';
 import {
   StandardScaler,
   TargetStandardScaler,
@@ -57,15 +59,13 @@ describe('test basic pipeline logic', () => {
       [
         'regressor',
         new FCNN({
-          inputShape: 3,
           hiddenShapes: [64, 64, 32],
-          outputShape: 1,
           hiddenActivation: 'relu',
           finalActivation: 'linear',
           kernelInitializer: 'glorotUniform',
           optimizer: 'adam',
           loss: 'meanSquaredError',
-          epochs: 10,
+          epochs: 20,
           learningRate: 0.0001,
           batchSize: 36,
           validationSplit: 0.2,
@@ -90,15 +90,13 @@ describe('test basic pipeline logic', () => {
       [
         'regressor',
         new FCNN({
-          inputShape: 3,
           hiddenShapes: [64, 64, 32],
-          outputShape: 1,
           hiddenActivation: 'relu',
           finalActivation: 'linear',
           kernelInitializer: 'glorotUniform',
           optimizer: 'adam',
           loss: 'meanSquaredError',
-          epochs: 10,
+          epochs: 20,
           learningRate: 0.0001,
           batchSize: 36,
           validationSplit: 0.2,
