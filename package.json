@@ -48,6 +48,7 @@
   "dependencies": {
     "@tensorflow/tfjs": "^3.15.0",
     "@types/node": "^17.0.31",
+    "libsvm-js": "^0.2.1",
     "ml-matrix": "^6.10.0",
     "ml-random-forest": "^2.1.0",
     "ml-regression-multivariate-linear": "^2.0.3",
