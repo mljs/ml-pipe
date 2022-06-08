@@ -1,4 +1,4 @@
-import { argSort, repeat, randomGaussianMatrix } from '../array';
+import { argSort, repeat, randomGaussianMatrix, Counter } from '../array';
 
 describe('test argsort', () => {
   it('test argsort - default ascending', () => {
@@ -35,5 +35,14 @@ describe('test random gaussian matrix', () => {
     expect(matrix.columns).toBe(10);
     const mean = matrix.mean();
     expect(mean).toBeCloseTo(0, 0.1);
+  });
+});
+
+describe('test getCounter', () => {
+  it('getCounter', () => {
+    const array = [1, 2, 3, 1, 2, 3, 1, 2, 3];
+    const counter = new Counter(array);
+    expect(counter.get(1)).toBe(3);
+    expect([...counter.keys()]).toStrictEqual([1, 2, 3]);
   });
 });
