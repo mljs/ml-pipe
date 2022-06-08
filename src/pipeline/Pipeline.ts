@@ -63,7 +63,7 @@ export class Pipeline {
       let [name, transformer] = step;
       if ('transform' in transformer) {
         if (!(name === 'passthrough')) {
-          if (transformer.onTarget === true) {
+          if (transformer.onTarget) {
             if (yt === undefined) {
               throw new Error('y is undefined');
             }
@@ -94,7 +94,7 @@ export class Pipeline {
       let [name, transformer] = step;
       if ('transform' in transformer) {
         if (!(name === 'passthrough')) {
-          if (transformer.onTarget === true) {
+          if (transformer.onTarget) {
             if (yt !== undefined) {
               yt = transformer.transform(yt);
             }
@@ -122,7 +122,7 @@ export class Pipeline {
       let [name, transformer] = step;
       if ('transform' in transformer) {
         if (!(name === 'passthrough')) {
-          if (transformer.onTarget === true) {
+          if (transformer.onTarget) {
             prediction = transformer.inverseTransform(prediction);
           }
         }

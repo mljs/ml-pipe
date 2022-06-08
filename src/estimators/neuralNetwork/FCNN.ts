@@ -69,17 +69,17 @@ function validateOptions(options: FCNNOptions) {
   }
 
   return {
-    hiddenShapes: hiddenShapes,
+    hiddenShapes,
 
-    hiddenActivation: hiddenActivation,
-    kernelInitializer: kernelInitializer,
-    optimizer: optimizer,
-    loss: loss,
-    epochs: epochs,
-    learningRate: learningRate,
-    batchSize: batchSize,
-    validationSplit: validationSplit,
-    finalActivation: finalActivation,
+    hiddenActivation,
+    kernelInitializer,
+    optimizer,
+    loss,
+    epochs,
+    learningRate,
+    batchSize,
+    validationSplit,
+    finalActivation,
   };
 }
 
