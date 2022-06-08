@@ -21,3 +21,5 @@ export {
   StandardScaler,
   TargetStandardScaler,
 } from './transformers/preprocessing/StandardScaler';
+
+export { DummyRegressor } from './estimators/dummy/DummyRegressor';
