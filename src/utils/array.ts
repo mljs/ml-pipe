@@ -40,3 +40,17 @@ export function randomGaussianMatrix(rows: number, cols: number): Matrix {
     .map(() => gaussRandom());
   return Matrix.from1DArray(rows, cols, arr);
 }
+
+export class Counter<CounterKey> extends Map<CounterKey, number> {
+  constructor(items: Iterable<CounterKey>) {
+    super();
+
+    for (let it of items) {
+      this.add(it);
+    }
+  }
+
+  add(it: CounterKey) {
+    this.set(it, (this.get(it) || 0) + 1);
+  }
+}
