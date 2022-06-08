@@ -15,7 +15,7 @@ export function argSort(
     .map(decorateWIndex)
     .sort((a, b) => a[0] - b[0])
     .map(removeDecoration);
-  if (sortAscending === true) {
+  if (sortAscending) {
     return sorted;
   } else {
     return sorted.reverse();
