@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0](https://github.com/mljs/ml-pipe/compare/v0.2.0...v0.3.0) (2022-06-29)
+
+
+### Features
+
+* first dummy regressor implementation ([75b1a6e](https://github.com/mljs/ml-pipe/commit/75b1a6efef741cb7a36386ea9f6977fc92353c4d))
+* implement SVR with options, closes [#4](https://github.com/mljs/ml-pipe/issues/4) ([d4389b0](https://github.com/mljs/ml-pipe/commit/d4389b0014fd0baac1bf71f55ee4d725aeb8b3f2))
+
 ## [0.2.0](https://github.com/mljs/ml-pipe/compare/v0.1.0...v0.2.0) (2022-05-17)
 
 
