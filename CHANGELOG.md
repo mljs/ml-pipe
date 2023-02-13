@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0](https://github.com/mljs/ml-pipe/compare/v0.2.0...v0.3.0) (2023-02-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* Using objects instead of arrays to specify pipline steps
+
+### Features
+
+* first dummy regressor implementation ([75b1a6e](https://github.com/mljs/ml-pipe/commit/75b1a6efef741cb7a36386ea9f6977fc92353c4d))
+* implement `DummyClassifier` ([5df931a](https://github.com/mljs/ml-pipe/commit/5df931a09fa91c0c3a9d53f3c0602232cd99387b)), closes [#36](https://github.com/mljs/ml-pipe/issues/36)
+* implement SVR with options, closes [#4](https://github.com/mljs/ml-pipe/issues/4) ([d4389b0](https://github.com/mljs/ml-pipe/commit/d4389b0014fd0baac1bf71f55ee4d725aeb8b3f2))
+* refactor pipeline interface ([b83ca31](https://github.com/mljs/ml-pipe/commit/b83ca313107a13cc3550b82a0256935cc0d2d7e5))
+
 ## [0.2.0](https://github.com/mljs/ml-pipe/compare/v0.1.0...v0.2.0) (2022-05-17)
 
 
