@@ -40,4 +40,33 @@ describe('test MinMaxScaler', () => {
 
     expect(scaler.inverseTransform(transformed)).toStrictEqual(data);
   });
+
+  it('invese transform', () => {
+    const data = new Matrix([
+      [0, 1],
+      [1, 2],
+      [4356, 1],
+      [1, 345],
+    ]);
+
+    const scaler = new MinMaxScaler();
+    const transformed = scaler.fitTransform(data);
+
+    expect(scaler.inverseTransform(transformed)).toStrictEqual(data);
+  });
+
+  it('test throw if not fitted', () => {
+    const data = new Matrix([
+      [0, 1],
+      [1, 2],
+      [4356, 1],
+      [1, 345],
+    ]);
+
+    const scaler = new MinMaxScaler();
+
+    expect(() => scaler.transform(data)).toThrow(
+      'You must fit the transformer before using it',
+    );
+  });
 });

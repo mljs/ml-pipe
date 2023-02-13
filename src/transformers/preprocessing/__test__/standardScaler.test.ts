@@ -35,4 +35,32 @@ describe('test StandardScaler', () => {
 
     expect(scaler.transform(data)).toStrictEqual(expected);
   });
+
+  it('invese transform', () => {
+    const data = new Matrix([
+      [0, 1],
+      [1, 2],
+      [4356, 1],
+      [1, 345],
+    ]);
+
+    const scaler = new StandardScaler();
+    const transformed = scaler.fitTransform(data);
+    expect(scaler.inverseTransform(transformed)).toStrictEqual(data);
+  });
+
+  it('test throw if not fitted', () => {
+    const data = new Matrix([
+      [0, 1],
+      [1, 2],
+      [4356, 1],
+      [1, 345],
+    ]);
+
+    const scaler = new StandardScaler();
+
+    expect(() => scaler.transform(data)).toThrow(
+      'You must fit the transformer before using it',
+    );
+  });
 });

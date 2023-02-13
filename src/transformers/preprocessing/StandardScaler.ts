@@ -28,6 +28,9 @@ export class StandardScaler implements Transformer {
   }
 
   public transform(X: Matrix) {
+    if (!this.fitted) {
+      throw new Error('You must fit the transformer before using it');
+    }
     let steps: OperationSteps = {
       steps: [
         [this.mean, '-'],
