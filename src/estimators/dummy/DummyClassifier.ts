@@ -1,5 +1,5 @@
 import { Matrix } from 'ml-matrix';
-import { argmax } from 'ml-spectra-processing';
+import { xMaxIndex } from 'ml-spectra-processing';
 
 import { Counter } from '../../utils/array';
 import { sample } from '../../utils/sample';
@@ -28,7 +28,7 @@ export class DummyClassifier implements Estimator {
   private _predict(X: Matrix) {
     const keys = [...this.classStats.keys()];
     const counts = keys.map((key) => this.classStats.get(key) || 0);
-    const maxClassIndex = argmax(counts);
+    const maxClassIndex = xMaxIndex(counts);
     const maxClassName = keys[maxClassIndex];
     let prediction = new Matrix(X.rows, 1);
     switch (this.options.strategy) {
