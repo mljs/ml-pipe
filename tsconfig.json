@@ -10,5 +10,5 @@
     "target": "es2022",
     "skipLibCheck": true
   },
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "examples"]
 }
