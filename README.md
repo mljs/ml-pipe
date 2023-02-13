@@ -22,11 +22,10 @@ import {meanSquaredError} from 'ml-pipe/metrics/regression'
 const {xTrain, xTest, yTrain, yTest} = trainTestSplit(x, y, 
     {trainFraction: 0.8,  stratify: yBinned})
 
-
 const pipe = new Pipeline([
-    ('xScale', new StandardScaler()),
-    ('yScale', new TargetStandardScaler()),
-    ('model', new FCNN({inputSize: 5}))
+    ['xScale', new StandardScaler()],
+    ['yScale', new TargetStandardScaler()],
+    ['model', new FCNN({inputSize: 5})]
 ])
 
 await pipe.fit(XTrain, yTrain)
