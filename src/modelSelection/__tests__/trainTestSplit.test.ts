@@ -93,7 +93,12 @@ describe('test trainTestSplit', () => {
       a.setRow(i, [1, 1, 1]);
     }
     const b = Matrix.zeros(10, 3);
-    const { trainX, testX, trainY, testY } = trainTestSplit(a, b, {
+    const {
+      xTrain: trainX,
+      xTest: testX,
+      yTest: testY,
+      yTrain: trainY,
+    } = trainTestSplit(a, b, {
       trainFraction: 0.5,
       seed: 'seed',
     });
@@ -108,7 +113,12 @@ describe('test trainTestSplit', () => {
   it('now, do not shuffle', () => {
     const a = Matrix.zeros(10, 3);
     const b = Matrix.zeros(10, 3);
-    const { trainX, testX, trainY, testY } = trainTestSplit(a, b, {
+    const {
+      xTrain: trainX,
+      xTest: testX,
+      yTrain: trainY,
+      yTest: testY,
+    } = trainTestSplit(a, b, {
       trainFraction: 0.5,
       shuffle: false,
       seed: 'seed',
