@@ -1,5 +1,8 @@
 import { Matrix } from 'ml-matrix';
+import { argmax } from 'ml-spectra-processing';
 
+import { Counter } from '../../utils/array';
+import { sample } from '../../utils/sample';
 import { Estimator } from '../Estimator';
 
 export interface DummyClassifierOptions {
@@ -10,27 +13,41 @@ export interface DummyClassifierOptions {
 export class DummyClassifier implements Estimator {
   public fitted: boolean;
   private options: DummyClassifierOptions;
+  private classStats: Counter<any>;
   public constructor(options: DummyClassifierOptions) {
     const { strategy = 'random', constantValue = 0 } = options;
     this.fitted = false;
     this.options = { strategy, constantValue };
+    this.classStats = new Counter([]);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _fit(X: Matrix, y: Matrix) {
+  private _fit(y: Matrix) {
+    this.classStats = new Counter(y.to1DArray());
+  }
+
+  private _predict(X: Matrix) {
+    const keys = [...this.classStats.keys()];
+    const counts = keys.map((key) => this.classStats.get(key) || 0);
+    const maxClassIndex = argmax(counts);
+    const maxClassName = keys[maxClassIndex];
+    let prediction = new Matrix(X.rows, 1);
     switch (this.options.strategy) {
       case 'stratified':
-        // get the class distribution in y
+        prediction = sample(counts, keys, prediction);
         break;
       case 'majority':
-        // get the majority class in y
+        for (let i = 0; i < X.rows; i++) {
+          prediction.set(i, 0, maxClassName);
+        }
         break;
       default:
         break;
     }
+    return prediction;
   }
 
   public async fit(X: Matrix, y: Matrix) {
+    this._fit(y);
     this.fitted = true;
   }
 
@@ -38,6 +55,6 @@ export class DummyClassifier implements Estimator {
     if (!this.fitted) {
       throw new Error('Model not fitted');
     }
-    return new Matrix(this.predict(X.to2DArray()));
+    return new Matrix(this._predict(X));
   }
 }
