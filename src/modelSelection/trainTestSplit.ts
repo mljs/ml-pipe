@@ -15,6 +15,13 @@ export interface TrainTestSplitOptions {
   seed?: string;
 }
 
+interface TrainTestSplitOutput {
+  xTrain: Matrix;
+  xTest: Matrix;
+  yTrain: Matrix;
+  yTest: Matrix;
+}
+
 /**
  * Split a dataset into a train and test set.
  *
@@ -22,7 +29,7 @@ export interface TrainTestSplitOptions {
  * @param {Matrix} x - Feature matrix
  * @param {Matrix} y - Target matrix
  * @param {TrainTestSplitOptions} [options={}]
- * @return {Matrix, Matrix, Matrix, Matrix} - xTrain xTest, yTrain yTest
+ * @return TrainTestSplitOutput
  */
 export function trainTestSplit(
   x: Matrix,
@@ -82,7 +89,7 @@ export function trainTestSplit(
     testY.setRow(i, y.getRow(testIndices[i]));
   }
 
-  return { trainX, trainY, testX, testY };
+  return { xTrain: trainX, yTrain: trainY, xTest: testX, yTest: testY };
 }
 
 function shuffleArray(x: Array<any>, seed?: string) {
