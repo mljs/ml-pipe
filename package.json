@@ -55,6 +55,7 @@
     "ml-matrix": "^6.10.4",
     "ml-random-forest": "^2.1.0",
     "ml-regression-multivariate-linear": "^2.0.4",
+    "ml-spectra-processing": "^11.16.0",
     "seedrandom": "^3.0.5"
   }
 }
